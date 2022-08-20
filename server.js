@@ -10,7 +10,7 @@ const navigator = new Navigator();
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
-const PORT = process.env.PORT | 3000;
+const PORT = process.env.PORT || 3000;
 
 const Weather_Key = "95c53b7e4a348c53da6093ce4c53cbd8";
 

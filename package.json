@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "nodemon server.js",
-    "start": "server.js"
+    "start": "nodemon server.js"
   },
   "author": "Amnish Singh Arora",
   "license": "ISC",
