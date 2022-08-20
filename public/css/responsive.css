@@ -1,0 +1,21 @@
+@media screen and (min-width: 500px) {
+    .weather-results {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .grid-span-2 {
+        grid-column: span 2;
+    }
+
+    
+}
+
+@media screen and (max-width: 500px) {
+    .weather-results article {
+        border-bottom: 1px solid var(--color-accent);
+    }
+
+    .weather-results {
+        border-top: 500px;
+    }
+}

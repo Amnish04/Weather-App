@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Today</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <script defer src="/js/events.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Weather Today</h1>
+    </header>
+    
+    <main>
+        <section class="actions">
+            <form action="/weather" method="post">
+                <input required type="text" name="city" placeholder="Enter 'City Name,[Country Code]'">
+                {{!-- <input type="submit" value="Submit"> --}}
+            </form>
+            <a href="/" title="Weather in your City?">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="28" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                </svg>
+            </a>
+        </section>
+
+        {{#if data}}
+            <section class="weather-results">
+                <article id="weather-type">
+                    <div class="weather-icon">
+                        <img src="http://openweathermap.org/img/w/{{data.weather.icon}}.png" alt="Weather Icon">
+                    </div>
+                    <div class="weather-type-name">
+                        {{data.weather.main}}
+                    </div>
+                </article>
+                <article id="weather-description">
+                    <div class="weather-detail">
+                        <p class="detail-key">City</p>:
+                        <p class="detail-value">{{data.name}}</p>
+                    </div>
+                    <div class="weather-detail">
+                        <p class="detail-key">Country</p>:
+                        <p class="detail-value">{{data.sys.country}}</p>
+                    </div>
+                    <div class="weather-detail">
+                        <p class="detail-key">Temperature</p>:
+                        <p class="detail-value">{{data.main.temp}}&deg;C</p>
+                    </div>
+                    <div class="weather-detail">
+                        <p class="detail-key">Feels Like</p>:
+                        <p class="detail-value">{{data.main.feels_like}}&deg;C</p>
+                    </div>
+                </article>
+                <article id="more-details" class="grid-span-2">
+                    <div class="weather-detail">
+                        <p class="detail-key">Description</p>:
+                        <p class="detail-value">{{#capital}}{{data.weather.description}}{{/capital}}</p>
+                    </div>
+                    <div class="weather-detail">
+                        <p class="detail-key">Min</p>:
+                        <p class="detail-value">{{data.main.temp_min}}&deg;C</p>
+                    </div>
+                    <div class="weather-detail">
+                        <p class="detail-key">Max</p>:
+                        <p class="detail-value">{{data.main.temp_max}}&deg;C</p>
+                    </div>
+                    <div class="weather-detail">
+                        <p class="detail-key">Pressure</p>:
+                        <p class="detail-value">{{data.main.pressure}} Pa</p>
+                    </div>
+                    <div class="weather-detail">
+                        <p class="detail-key">Humidity</p>:
+                        <p class="detail-value">{{data.main.humidity}} g/m<sup>3</sup> </p>
+                    </div>
+                </article>
+            </section>
+        {{/if}}
+
+        {{#if error}}
+            <div class="alert alert-danger">
+                {{error}}
+            </div>
+        {{/if}}
+    </main>
+</body>
+</html>
