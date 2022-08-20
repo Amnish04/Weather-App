@@ -1,7 +1,6 @@
 const readline = require("readline");
 require("dotenv").config();
 const express = require('express');
-const path = require("path");
 const fetch = require("node-fetch");
 const exphbs = require("express-handlebars");
 // const rl = readline.createInterface(process.stdin, process.stdout);
@@ -14,6 +13,7 @@ app.use(express.static("public"));
 const PORT = process.env.PORT | 3000;
 
 const Weather_Key = "95c53b7e4a348c53da6093ce4c53cbd8";
+console.log(process.env.WEATHER_KEY);
 
 app.set("view engine", ".hbs");
 app.engine(".hbs", exphbs.engine({
@@ -44,9 +44,9 @@ app.get("/", (req, res) => {
             fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=${Weather_Key}&units=metric`)
             .then(data => data.json())
             .then((json) => {
-                console.log(json)
-                if (json.cod === '404') {
-                    throw "No City Found with name '" + req.body.city + "'";
+                console.log(json, Weather_Key);
+                if (Math.round(json.cod/100) == 4) {
+                    throw json.message;
                 }
                 // Format Data for easier use
                 if (json.size) json = json[0];
@@ -56,6 +56,12 @@ app.get("/", (req, res) => {
                     data: json,
                     layout: false
                 });
+            })
+            .catch((error) => {
+                res.render("index", {
+                    error: error,
+                    layout: false
+                })
             });
         } else {
             res.render("index", {
