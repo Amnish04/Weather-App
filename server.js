@@ -13,7 +13,6 @@ app.use(express.static("public"));
 const PORT = process.env.PORT | 3000;
 
 const Weather_Key = "95c53b7e4a348c53da6093ce4c53cbd8";
-console.log(process.env.WEATHER_KEY);
 
 app.set("view engine", ".hbs");
 app.engine(".hbs", exphbs.engine({
@@ -39,12 +38,17 @@ app.engine(".hbs", exphbs.engine({
 }));
 
 app.get("/", (req, res) => {
+    res.render("index", {
+        layout:false
+    });
+});
+
+app.get("/weather", (req, res) => {
     navigator.geolocation.getCurrentPosition((position, error) => {
         if (!error) {
             fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=${process.env.WEATHER_KEY}&units=metric`)
             .then(data => data.json())
             .then((json) => {
-                console.log(json, Weather_Key);
                 if (Math.round(json.cod/100) == 4) {
                     throw json.message;
                 }
