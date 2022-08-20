@@ -5,12 +5,12 @@ const fetch = require("node-fetch");
 const exphbs = require("express-handlebars");
 // const rl = readline.createInterface(process.stdin, process.stdout);
 const app = express();
-const { Navigator } = require("node-navigator");
-const navigator = new Navigator();
+const cookieParser = require('cookie-parser')
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.use('/favicon.ico', express.static('/favicon.ico'));
+app.use(cookieParser());
 const PORT = process.env.PORT || 8080;
 
 const Weather_Key = "95c53b7e4a348c53da6093ce4c53cbd8";
@@ -39,35 +39,35 @@ app.engine(".hbs", exphbs.engine({
 }));
 
 app.get("/", (req, res) => {
-    navigator.geolocation.getCurrentPosition((position, error) => {
-        if (!error) {
-            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=95c53b7e4a348c53da6093ce4c53cbd8&units=metric`)
-            .then(data => data.json())
-            .then((json) => {
-                if (Math.round(json.cod/100) == 4) {
-                    throw json.message;
-                }
-                // Format Data for easier use
-                if (json.size) json = json[0];
-                json.weather = json.weather[0];
-                // Render the page with formatted data
-                res.render("index", {
-                    data: json,
-                    layout: false
-                });
-            })
-            .catch((error) => {
-                res.render("index", {
-                    error: error,
-                    layout: false
-                })
-            });
-        } else {
-            res.render("index", {
-                layout: false
-            })
+    res.render("index", {
+        layout: false
+    });
+});
+
+app.get("/weather", (req, res) => {
+    if (!(req.cookies.lat && req.cookies.lon)) { // If user directly visits to this route
+        res.redirect("/");
+    }
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${req.cookies.lat}&lon=${req.cookies.lon}&appid=95c53b7e4a348c53da6093ce4c53cbd8&units=metric`)
+    .then(data => data.json())
+    .then((json) => {
+        if (Math.round(json.cod/100) == 4) {
+            throw json.message;
         }
-        
+        // Format Data for easier use
+        if (json.size) json = json[0];
+        json.weather = json.weather[0];
+        // Render the page with formatted data
+        res.render("index", {
+            data: json,
+            layout: false
+        });
+    })
+    .catch((error) => {
+        res.render("index", {
+            error: error,
+            layout: false
+        })
     });
 });
 
