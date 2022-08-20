@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
 app.get("/weather", (req, res) => {
     navigator.geolocation.getCurrentPosition((position, error) => {
         if (!error) {
-            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=${process.env.WEATHER_KEY}&units=metric`)
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=95c53b7e4a348c53da6093ce4c53cbd8&units=metric`)
             .then(data => data.json())
             .then((json) => {
                 if (Math.round(json.cod/100) == 4) {
@@ -77,7 +77,7 @@ app.get("/weather", (req, res) => {
 });
 
 app.post("/weather", (req, res) => {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${req.body.city}&appid=${process.env.WEATHER_KEY}&units=metric`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${req.body.city}&appid=95c53b7e4a348c53da6093ce4c53cbd8&units=metric`)
     .then(data => data.json())
     .then(json => {
         if (json.cod === '404') {
