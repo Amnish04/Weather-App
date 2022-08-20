@@ -4,7 +4,8 @@
   "description": "A basic weather application that uses a free API named OpenWeatherMap.org to request live weather information over the internet",
   "main": "server.js",
   "scripts": {
-    "test": "nodemon server.js"
+    "test": "nodemon server.js",
+    "start": "server.js"
   },
   "author": "Amnish Singh Arora",
   "license": "ISC",

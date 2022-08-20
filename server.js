@@ -38,12 +38,6 @@ app.engine(".hbs", exphbs.engine({
 }));
 
 app.get("/", (req, res) => {
-    res.render("index", {
-        layout:false
-    });
-});
-
-app.get("/weather", (req, res) => {
     navigator.geolocation.getCurrentPosition((position, error) => {
         if (!error) {
             fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=95c53b7e4a348c53da6093ce4c53cbd8&units=metric`)
