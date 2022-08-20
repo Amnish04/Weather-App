@@ -95,6 +95,13 @@ app.post("/weather", (req, res) => {
     });
 });
 
+app.get("/weather/location-error", (req, res) => {
+    res.render("index", {
+        layout: false,
+        error: "Your Device did not allow access to your current location!"
+    });
+});
+
 app.listen(PORT, () => {
     console.log("Started listening on PORT " + PORT);
 });

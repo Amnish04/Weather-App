@@ -139,3 +139,8 @@
         background-color: lightpink;
         color: maroon;
     }
+
+    .loading {
+        font-family: var(--font-headings);
+        text-align: center;
+    }
