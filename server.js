@@ -41,7 +41,7 @@ app.engine(".hbs", exphbs.engine({
 app.get("/", (req, res) => {
     navigator.geolocation.getCurrentPosition((position, error) => {
         if (!error) {
-            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=${Weather_Key}&units=metric`)
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=${process.env.WEATHER_KEY}&units=metric`)
             .then(data => data.json())
             .then((json) => {
                 console.log(json, Weather_Key);
@@ -73,7 +73,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/weather", (req, res) => {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${req.body.city}&appid=${Weather_Key}&units=metric`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${req.body.city}&appid=${process.env.WEATHER_KEY}&units=metric`)
     .then(data => data.json())
     .then(json => {
         if (json.cod === '404') {
