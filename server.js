@@ -13,6 +13,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
 const PORT = process.env.PORT | 3000;
 
+const Weather_Key = "95c53b7e4a348c53da6093ce4c53cbd8";
+
 app.set("view engine", ".hbs");
 app.engine(".hbs", exphbs.engine({
     extname: ".hbs",
@@ -39,9 +41,13 @@ app.engine(".hbs", exphbs.engine({
 app.get("/", (req, res) => {
     navigator.geolocation.getCurrentPosition((position, error) => {
         if (!error) {
-            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=${process.env.WEATHER_KEY}&units=metric`)
+            fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=${Weather_Key}&units=metric`)
             .then(data => data.json())
             .then((json) => {
+                console.log(json)
+                if (json.cod === '404') {
+                    throw "No City Found with name '" + req.body.city + "'";
+                }
                 // Format Data for easier use
                 if (json.size) json = json[0];
                 json.weather = json.weather[0];
@@ -61,7 +67,7 @@ app.get("/", (req, res) => {
 });
 
 app.post("/weather", (req, res) => {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${req.body.city}&appid=${process.env.WEATHER_KEY}&units=metric`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${req.body.city}&appid=${Weather_Key}&units=metric`)
     .then(data => data.json())
     .then(json => {
         if (json.cod === '404') {
