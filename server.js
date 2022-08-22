@@ -13,7 +13,7 @@ app.use('/favicon.ico', express.static('/favicon.ico'));
 app.use(cookieParser());
 const PORT = process.env.PORT || 8080;
 
-const Weather_Key = "95c53b7e4a348c53da6093ce4c53cbd8";
+const Weather_Key = process.env.WEATHER_KEY || "95c53b7e4a348c53da6093ce4c53cbd8";
 
 app.set("view engine", ".hbs");
 app.engine(".hbs", exphbs.engine({
@@ -38,6 +38,10 @@ app.engine(".hbs", exphbs.engine({
     }
 }));
 
+const units = "metric";
+
+
+/* Routes */
 app.get("/", (req, res) => {
     res.render("index", {
         layout: false
@@ -48,7 +52,7 @@ app.get("/weather", (req, res) => {
     if (!(req.cookies.lat && req.cookies.lon)) { // If user directly visits to this route
         res.redirect("/");
     }
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${req.cookies.lat}&lon=${req.cookies.lon}&appid=95c53b7e4a348c53da6093ce4c53cbd8&units=metric`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${req.cookies.lat}&lon=${req.cookies.lon}&appid=${Weather_Key}&units=${units}`)
     .then(data => data.json())
     .then((json) => {
         if (Math.round(json.cod/100) == 4) {
@@ -72,7 +76,7 @@ app.get("/weather", (req, res) => {
 });
 
 app.post("/weather", (req, res) => {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${req.body.city}&appid=95c53b7e4a348c53da6093ce4c53cbd8&units=metric`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${req.body.city}&appid=${Weather_Key}&units=${units}`)
     .then(data => data.json())
     .then(json => {
         if (json.cod === '404') {
