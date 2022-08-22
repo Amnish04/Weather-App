@@ -3,3 +3,5 @@ A basic weather web application that uses its own REST API to make requests to O
 
 ### Link to the website:
 ***weather-today-amnish.herokuapp.com/***
+
+#### Note: The application currently cannot access the user's current location when deployed in the cloud as it does not use HTTPS secure protocol. This feature will be enabled soon as the new version is rolled out with support for HTTPS.
