@@ -14,6 +14,7 @@ app.use(cookieParser());
 const PORT = process.env.PORT || 8080;
 
 const Weather_Key = process.env.WEATHER_KEY || "95c53b7e4a348c53da6093ce4c53cbd8";
+console.log(Weather_Key);
 
 app.set("view engine", ".hbs");
 app.engine(".hbs", exphbs.engine({
