@@ -144,3 +144,15 @@
         font-family: var(--font-headings);
         text-align: center;
     }
+
+    .location-icon {
+        fill: var(--color-accent);
+    }
+
+    .location-icon:hover {
+        opacity: 0.75;
+    }
+
+    .location-icon:active {
+        opacity: 1;
+    }

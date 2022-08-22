@@ -6,5 +6,9 @@ if (window.location.pathname == "/") {
         window.location.href = "/weather";
     }, (error) => {
         window.location.href = "/weather/location-error";
+    }, {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 1000
     });
 }
