@@ -5,7 +5,8 @@ const fetch = require("node-fetch");
 const exphbs = require("express-handlebars");
 // const rl = readline.createInterface(process.stdin, process.stdout);
 const app = express();
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const { time } = require("console");
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
@@ -34,49 +35,75 @@ app.engine(".hbs", exphbs.engine({
             return words.map((word) => {
                 return word[0].toUpperCase() + word.substr(1);
             }).join(" ");
+        },
+        date: function(options) {
+            const timestamp = Number(options.fn(this)) * 1000;
+            const date = new Date(timestamp);
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                                "July", "August", "September", "October", "November", "December"];
+            return `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+        },
+        round: function(options) {
+            return Math.round(Number(options.fn(this)));
         }
     }
 }));
 
-const units = "metric";
-
+const UNITS = "metric";
 
 /* Routes */
+
+// This route will render an empty index page that will load up the location of client in cookies and redirect to '/weather' endpoint, 
+// where server can access the location through cookies
 app.get("/", (req, res) => {
     res.render("index", {
         layout: false
     });
 });
 
-app.get("/weather", (req, res) => {
+// This route checks if the cookies are correctly loaded with client location and then 
+// tries to render the index page with all the weather data for corresponding location
+// Otherwise redirects back to '/' route to capture the client location again
+app.get("/weather", async (req, res) => {
     if (!(req.cookies.lat && req.cookies.lon)) { // If user directly visits to this route
         res.redirect("/");
     }
-    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${req.cookies.lat}&lon=${req.cookies.lon}&appid=${Weather_Key}&units=${units}`)
-    .then(data => data.json())
-    .then((json) => {
-        if (Math.round(json.cod/100) == 4) {
-            throw json.message;
+    try {
+        // Gather Data
+        const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${req.cookies.lat}&lon=${req.cookies.lon}&appid=${Weather_Key}&units=${UNITS}`);
+        const weatherData = await weatherResponse.json();
+        const forecastResponse = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${req.cookies.lat}&lon=${req.cookies.lon}&appid=${Weather_Key}&units=${UNITS}`);
+        const forecastData = await forecastResponse.json();
+        forecastData.list = forecastData.list.filter((elem, index) => {
+            return index % 8 == 0 && index > 0;
+        });
+        console.log(JSON.stringify(forecastData));
+        // Operate on data
+        if (Math.round(weatherData.cod/100) == 4) {
+            throw weatherData.message;
         }
         // Format Data for easier use
-        if (json.size) json = json[0];
-        json.weather = json.weather[0];
+        if (weatherData.size) weatherData = weatherData[0];
+        weatherData.weather = weatherData.weather[0];
         // Render the page with formatted data
         res.render("index", {
-            data: json,
+            data: {
+                data: weatherData,
+                forecastData: forecastData
+            },
             layout: false
         });
-    })
-    .catch((error) => {
+    }
+    catch(error) {
         res.render("index", {
             error: error,
             layout: false
         })
-    });
+    };
 });
 
 app.post("/weather", (req, res) => {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${req.body.city}&appid=${Weather_Key}&units=${units}`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${req.body.city}&appid=${Weather_Key}&units=${UNITS}`)
     .then(data => data.json())
     .then(json => {
         if (json.cod === '404') {

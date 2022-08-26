@@ -5,7 +5,7 @@ if (window.location.pathname == "/") {
         document.cookie = `lat=${position.coords.latitude}`;
         document.cookie = `lon=${position.coords.longitude}`;
         window.location.href = "/weather";
-        }, (error) => {
+        }, (error) => { // If unable to access client location
             console.log(error);
             window.location.href = "/weather/location-error";
         }, {

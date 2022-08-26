@@ -18,4 +18,12 @@
     .weather-results {
         border-top: 500px;
     }
+
+    .d-hidden {
+        display: block;
+    }
+
+    .mobile-hidden {
+        display: none;
+    }
 }

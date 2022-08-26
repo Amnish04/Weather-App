@@ -7,11 +7,12 @@
         --font-secondary: 'Lilita One', cursive;
         --color-primary: white;
         --color-secondary: black;
-        --color-accent: rgb(109, 0, 109);
+        --color-accent: rgb(211, 0, 211);
+        --color-accent-dark: rgba(148, 0, 148, 0.87);
     }
 
     ::selection {
-        background-color: var(--color-accent);
+        background-color: var(--color-accent-dark);
         color: var(--color-primary);
     }
 
@@ -34,7 +35,6 @@
         background-color: black;
         color: var(--color-primary);
         border: 1px solid black;
-        box-shadow: 1.5px 1.25px 1.25px rgba(0,0,0,0.5);
     }
 
     header h1::after {
@@ -155,4 +155,160 @@
 
     .location-icon:active {
         opacity: 1;
+    }
+
+    /* Utility Classes */
+    .wrapper-60 {
+        width: 60%;
+        max-width: 1000px;
+    }
+
+    .d-hidden {
+        display: none;
+    }
+
+    .d-block {
+        display: block;
+    }
+
+    /* List Classes */
+    .unstyled-list {
+        list-style-type: none;
+    }
+
+    /* Flex Classes */
+    .flex {
+        display: flex;
+    }  
+
+    .flex-vertical {
+        flex-direction: column;
+    }
+
+    .flex-row-gap-1 {
+        row-gap: 0.75em;
+    }
+
+    .flex-gap-1 {
+        gap: 1em;
+    }
+
+    .flex-wrap {
+        flex-wrap: wrap;
+    }
+
+    .flex-justify-center {
+        justify-content: center;
+    }
+
+    .flex-space-between {
+        justify-content: space-between;
+    }
+
+    .flex-align-center {
+        align-items: center;
+    }
+
+    /* Spacing Classes */
+    .m-auto {
+        margin: auto;
+    }
+
+    .px-2 {
+        padding-inline: 0.5em;
+    }
+
+    .pt-2 {
+        padding-top: 1em;
+    }
+
+    .pb-1 {
+        padding-bottom: 0.5em;
+    }
+
+    .mx-2 {
+        margin-inline: 0.25em;
+    }
+
+    /* Color Classes */
+    .bg-dark {
+        background-color: var(--color-secondary);
+    }
+
+    .color-light {
+         color: var(--color-primary);
+    }
+
+    .color-accent {
+        color: var(--color-accent);
+    }
+
+    /* Text Styling */
+    .text-center {
+        text-align: center;
+    }
+
+    .td-none {
+        text-decoration: none;
+    }
+
+    .text-underline {
+        text-decoration: underline;
+    }
+
+    .font-heavy {
+        font-weight: 700;
+    }
+
+    .link:hover,
+    .link:focus {
+        color: var(--color-accent);
+        text-decoration: underline;
+    }
+
+    /* Sizing Classes */
+    .min-width-300 {
+        min-width: 300px;
+    }
+
+    /* Shadow Classes */
+    .shadow-sm {
+        box-shadow: 0px 0px 4px rgba(100, 100, 100, 0.25);
+    }
+
+    .shadow-sm-top {
+        box-shadow: 1.5px -1.25px 1.25px rgba(0,0,0,0.5);
+    }
+    .shadow-sm-bottom {
+        box-shadow: 1.5px 1.25px 1.25px rgba(0,0,0,0.5);
+    }
+
+    .border-bottom {
+        border-bottom: 1px solid var(--color-accent);
+    }
+
+
+    /* Forecast Section */
+    .widget {
+        background-color: rgba(254,254,254);
+        padding: 0.5em;
+        border-radius: 5px;
+        cursor: pointer; 
+        transition: 100ms ease-in-out;
+        flex-grow: 1;
+        line-height: 24px;
+    }
+
+    .widget:hover,
+    .widget:focus {
+        box-shadow: 2px 2px 4px rgba(100, 100, 100, 0.25);
+        transform: translateY(-4px);
+    }
+
+    .weather-info {
+        gap: 10px;
+    }
+
+    .temperature {
+        font-size: 2em;
     }

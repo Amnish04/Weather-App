@@ -1,98 +1,216 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Today</title>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/responsive.css">
-    <script defer src="/js/events.js"></script>
-</head>
-<body>
-    <header>
-        <h1>Weather Today</h1>
-    </header>
-    
-    <main>
-        <section class="actions">
-            <form action="/weather" method="post">
-                <input required type="text" name="city" placeholder="Enter 'City Name,[Country Code]'">
-                {{!-- <input type="submit" value="Submit"> --}}
-            </form>
-            <a class="location-icon" href="/weather" title="Weather in your City?">
-                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="28" fill="rgb(109, 0, 109)" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                    <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-                </svg>
-            </a>
-        </section>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Weather Today</title>
+        <link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/css/responsive.css" />
+        <link rel="stylesheet" href="/css/forecast.scss">
+        <script defer src="/js/events.js"></script>
+    </head>
+    <body>
+        <header class="shadow-sm-bottom">
+            <h1>Weather Today</h1>
+        </header>
 
-        <div hidden class="loading">Loading...</div>
-        {{#if data}}
-            <section class="weather-results">
-                <article id="weather-type">
-                    <div class="weather-icon">
-                        <img src="http://openweathermap.org/img/w/{{data.weather.icon}}.png" alt="Weather Icon">
-                    </div>
-                    <div class="weather-type-name">
-                        {{data.weather.main}}
-                    </div>
-                </article>
-                <article id="weather-description">
-                    <div class="weather-detail">
-                        <p class="detail-key">City</p>:
-                        <p class="detail-value detail-key">{{#capital}}{{data.name}}{{/capital}}</p>
-                    </div>
-                    <div class="weather-detail">
-                        <p class="detail-key">Country</p>:
-                        <p class="detail-value">{{data.sys.country}}</p>
-                    </div>
-                    <div class="weather-detail">
-                        <p class="detail-key">Temperature</p>:
-                        <p class="detail-value">{{data.main.temp}}&deg;C</p>
-                    </div>
-                    <div class="weather-detail">
-                        <p class="detail-key">Feels Like</p>:
-                        <p class="detail-value">{{data.main.feels_like}}&deg;C</p>
-                    </div>
-                </article>
-                <article id="more-details" class="grid-span-2">
-                    <div class="weather-detail">
-                        <p class="detail-key">Description</p>:
-                        <p class="detail-value">{{#capital}}{{data.weather.description}}{{/capital}}</p>
-                    </div>
-                    <div class="weather-detail">
-                        <p class="detail-key">Min</p>:
-                        <p class="detail-value">{{data.main.temp_min}}&deg;C</p>
-                    </div>
-                    <div class="weather-detail">
-                        <p class="detail-key">Max</p>:
-                        <p class="detail-value">{{data.main.temp_max}}&deg;C</p>
-                    </div>
-                    <div class="weather-detail">
-                        <p class="detail-key">Pressure</p>:
-                        <p class="detail-value">{{data.main.pressure}} Pa</p>
-                    </div>
-                    <div class="weather-detail">
-                        <p class="detail-key">Humidity</p>:
-                        <p class="detail-value">{{data.main.humidity}} g/m<sup>3</sup> </p>
-                    </div>
-                </article>
+        <main>
+            <section class="actions">
+                <form action="/weather" method="post">
+                    <input
+                        required
+                        type="text"
+                        name="city"
+                        placeholder="Enter 'City Name,[Country Code]'"
+                    />
+                    {{! <input type="submit" value="Submit"> }}
+                </form>
+                <a
+                    class="location-icon"
+                    href="/weather"
+                    title="Weather in your City?"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="25"
+                        height="28"
+                        fill="rgb(109, 0, 109)"
+                        class="bi bi-geo-alt-fill"
+                        viewBox="0 0 16 16"
+                    >
+                        <path
+                            d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"
+                        ></path>
+                    </svg>
+                </a>
             </section>
-            <br />
-        {{/if}}
 
-        {{#if error}}
-            <div class="alert alert-danger">
-                {{error}}
+            <div hidden class="loading">Loading...</div>
+            {{#if data}}
+                {{#with data}}
+                    <section class="weather-results border-bottom">
+                        <article id="weather-type">
+                            <div class="weather-icon">
+                                <img
+                                    src="http://openweathermap.org/img/w/{{data.weather.icon}}.png"
+                                    alt="Weather Icon"
+                                />
+                            </div>
+                            <div class="weather-type-name">
+                                {{data.weather.main}}
+                            </div>
+                        </article>
+                        <article id="weather-description">
+                            <div class="weather-detail">
+                                <p class="detail-key">City</p>=
+                                <p class="detail-value detail-key">{{#capital
+                                    }}{{data.name}}{{/capital}}</p>
+                            </div>
+                            <div class="weather-detail">
+                                <p class="detail-key">Country</p>=
+                                <p class="detail-value">{{data.sys.country}}</p>
+                            </div>
+                            <div class="weather-detail">
+                                <p class="detail-key">Temperature</p>=
+                                <p
+                                    class="detail-value"
+                                >{{#round}}{{data.main.temp}}{{/round}}&deg;C</p>
+                            </div>
+                            <div class="weather-detail">
+                                <p class="detail-key">Feels Like</p>=
+                                <p
+                                    class="detail-value"
+                                >{{#round}}{{data.main.feels_like}}{{/round}}&deg;C</p>
+                            </div>
+                        </article>
+                        <article id="more-details" class="grid-span-2">
+                            <div class="weather-detail">
+                                <p class="detail-key">Description</p>=
+                                <p class="detail-value">{{#capital
+                                    }}{{data.weather.description}}{{/capital}}</p>
+                            </div>
+                            <div class="weather-detail">
+                                <p class="detail-key">Min</p>=
+                                <p
+                                    class="detail-value"
+                                >{{#round}}{{data.main.temp_min}}{{/round}}&deg;C</p>
+                            </div>
+                            <div class="weather-detail">
+                                <p class="detail-key">Max</p>=
+                                <p
+                                    class="detail-value"
+                                >{{#round}}{{data.main.temp_max}}{{/round}}&deg;C</p>
+                            </div>
+                            <div class="weather-detail">
+                                <p class="detail-key">Pressure</p>=
+                                <p class="detail-value">{{data.main.pressure}}
+                                    Pa</p>
+                            </div>
+                            <div class="weather-detail">
+                                <p class="detail-key">Humidity</p>=
+                                <p class="detail-value">{{data.main.humidity}}
+                                    g/m<sup>3</sup>
+                                </p>
+                            </div>
+                        </article>
+                    </section>
+
+                    <br />
+
+                    <section class="forecast flex flex-gap-1 flex-justify-center flex-wrap border-bottom pb-1">
+                        {{#with forecastData}}
+                            {{#each list}}
+                                <article class="widget shadow-sm">
+                                    <div class="weatherIcon flex flex-space-between">
+                                        <img class="d-block" src="http://openweathermap.org/img/w/{{weather.0.icon}}.png" alt="{{weather.0.description}}">
+                                        <div class="temperature">
+                                            <span>{{#round}}{{main.temp}}{{/round}}&deg;C</span>
+                                        </div>
+                                    </div>
+                                    <div class="weatherInfo">
+                                        <div class="description">
+                                            <div class="weatherCondition font-heavy">
+                                                {{weather.0.main}}
+                                            </div>
+                                            <div class="place">
+                                                <span class="text-underline">Feels Like</span> {{#round}}{{main.feels_like}}{{/round}}&deg;C
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="date">
+                                        {{#date}}
+                                            {{dt}}
+                                        {{/date}}
+                                    </div>
+                                </article>
+                            {{/each}}
+                        {{/with}}
+                    </section>
+
+                {{/with}}
+            {{/if}}
+
+            {{#if error}}
+                <div class="alert alert-danger">
+                    {{error}}
+                </div>
+            {{/if}}
+        </main>
+
+        <footer class="bg-dark color-light shadow-sm-top">
+            <h2 class="text-center pt-2">Other Links</h2>
+            <div class="flex flex-justify-center flex-wrap wrapper-70 m-auto">
+                <div class="min-width-300">
+                    <ul class="flex flex-vertical flex-row-gap-1 unstyled-list">
+                        <li><a
+                                class="link color-light td-none"
+                                href="https://openweathermap.org/api"
+                                target="_blank"
+                            >API Docs</a></li>
+                        <li><a
+                                class="link color-light td-none"
+                                href="https://openweathermap.org/current"
+                                target="_blank"
+                            >Current Weather Docs</a></li>
+                        <li><a
+                                class="link color-light td-none"
+                                href="https://openweathermap.org/forecast5"
+                                target="_blank"
+                            >5 day weather forecast</a></li>
+                        <li><a
+                                class="link color-light td-none"
+                                href="https://openweathermap.org/api/geocoding-api"
+                                target="_blank"
+                            >Geocoding API</a></li>
+                    </ul>
+                </div>
+                <div class="flex flex-justify-center flex-align-center">
+                    <marquee
+                        class="mobile-hidden"
+                        behavior="scroll"
+                        direction="right"
+                        class="flex flex-justify-center flex-align-center"
+                    >
+                        For More Info about the weather API, visit
+                        <a
+                            title="Open Weather Map"
+                            class="color-accent"
+                            href="https://openweathermap.org/"
+                            target="_blank"
+                        >Open Weather Map</a>
+                        site!
+                    </marquee>
+                    <p class="d-hidden text-center px-2">
+                        For More Info about the weather API, visit
+                        <a
+                            title="Open Weather Map"
+                            class="color-accent"
+                            href="https://openweathermap.org/"
+                        >Open Weather Map</a>
+                        site!
+                    </p>
+                </div>
             </div>
-        {{/if}}
-    </main>
-    
-    <footer>
-        <div class="wrapper">
-            <marquee behavior="smooth" direction="right"></marquee>
-        </div>
-    </footer>
-</body>
+        </footer>
+    </body>
 </html>
