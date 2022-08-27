@@ -7,6 +7,8 @@ const exphbs = require("express-handlebars");
 const app = express();
 const cookieParser = require('cookie-parser');
 const { time } = require("console");
+// Import the custom module
+const weather = require(__dirname + "/modules/weather.js");
 
 app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
@@ -14,8 +16,7 @@ app.use('/favicon.ico', express.static('/favicon.ico'));
 app.use(cookieParser());
 const PORT = process.env.PORT || 8080;
 
-const Weather_Key = process.env.WEATHER_KEY;
-
+// Configure Handlebars View Engine
 app.set("view engine", ".hbs");
 app.engine(".hbs", exphbs.engine({
     extname: ".hbs",
@@ -49,6 +50,7 @@ app.engine(".hbs", exphbs.engine({
     }
 }));
 
+const Weather_Key = process.env.WEATHER_KEY;
 const UNITS = "metric";
 
 /* Routes */
@@ -68,62 +70,25 @@ app.get("/weather", async (req, res) => {
     if (!(req.cookies.lat && req.cookies.lon)) { // If user directly visits to this route
         res.redirect("/");
     }
+    // If location is retrieved
+    weather.renderWeatherDataForLocation(res, req.cookies.lat, req.cookies.lon);
+});
+
+app.post("/weather", async (req, res) => {
     try {
-        // Gather Data
-        const weatherResponse = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${req.cookies.lat}&lon=${req.cookies.lon}&appid=${Weather_Key}&units=${UNITS}`);
-        const weatherData = await weatherResponse.json();
-        const forecastResponse = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${req.cookies.lat}&lon=${req.cookies.lon}&appid=${Weather_Key}&units=${UNITS}`);
-        const forecastData = await forecastResponse.json();
-        forecastData.list = forecastData.list.filter((elem, index) => {
-            return index % 8 == 0 && index > 0;
-        });
-        console.log(JSON.stringify(forecastData));
-        // Operate on data
-        if (Math.round(weatherData.cod/100) == 4) {
-            throw weatherData.message;
+        const locationRes = await fetch(`http://api.openweathermap.org/geo/1.0/direct?q=${req.body.city}&limit=1&appid=${Weather_Key}`);
+        const locationInfo = await locationRes.json();
+        if (locationInfo.length == 0) { // Check if the entered city was valid
+            throw `No city found with name '${req.body.city}'`;
         }
-        // Format Data for easier use
-        if (weatherData.size) weatherData = weatherData[0];
-        weatherData.weather = weatherData.weather[0];
-        // Render the page with formatted data
-        res.render("index", {
-            data: {
-                data: weatherData,
-                forecastData: forecastData
-            },
-            layout: false
-        });
+        weather.renderWeatherDataForLocation(res, locationInfo[0].lat, locationInfo[0].lon, UNITS);
     }
     catch(error) {
         res.render("index", {
-            error: error,
-            layout: false
-        })
-    };
-});
-
-app.post("/weather", (req, res) => {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${req.body.city}&appid=${Weather_Key}&units=${UNITS}`)
-    .then(data => data.json())
-    .then(json => {
-        if (json.cod === '404') {
-            throw "No City Found with name '" + req.body.city + "'";
-        }
-        // Format Data for easier use
-        if (json.size > 1) json = json[0];
-        json.weather = json.weather[0];
-        // Render the page with formatted data
-        res.render("index", {
-            data: json,
-            layout: false
+            layout: false,
+            error: error
         });
-    })
-    .catch((err) => {
-        res.render("index", {
-            error: err,
-            layout: false
-        })
-    });
+    }
 });
 
 app.get("/weather/location-error", (req, res) => {
