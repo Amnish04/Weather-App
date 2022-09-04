@@ -6,8 +6,9 @@
         <title>Weather Today</title>
         <link rel="stylesheet" href="/css/style.css" />
         <link rel="stylesheet" href="/css/responsive.css" />
-        <link rel="stylesheet" href="/css/forecast.scss">
+        <link rel="stylesheet" href="/css/searchBar.css">
         <script defer src="/js/events.js"></script>
+        <script defer src="/js/search.js"></script>
     </head>
     <body>
         <header class="shadow-sm-bottom">
@@ -18,18 +19,24 @@
             <section class="actions">
                 <form action="/weather" method="post">
                     <input
+                        id="countrySearch"
                         required
                         type="text"
                         name="city"
                         placeholder="Enter 'City Name,[Country Code]'"
+                        autocomplete="off"
                     />
-                    {{! <input type="submit" value="Submit"> }}
+                    
+                    <div id="searchResults" class="results">
+                        <ul>
+                        </ul>
+                    </div>
                 </form>
                 <a
                     class="location-icon"
                     href="/weather"
                     title="Weather in your City?"
-                >
+                />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="25"
