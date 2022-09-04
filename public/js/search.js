@@ -31,7 +31,12 @@ function renderResults(results) {
 function configureSearchBar() {
     let timeout = null;
 
-    document.getElementById('countrySearch').addEventListener('keyup', function (e) {
+    let searchBar = document.getElementById('countrySearch');
+
+    /* Event Listeners */
+
+    // Find suggestions as user enters text and waits in between
+    searchBar.addEventListener('keyup', function (e) {
         if (timeout) {
             clearTimeout(timeout);
         }
@@ -62,8 +67,16 @@ function configureSearchBar() {
                 /* Render the retrieved results as suggestions */
                 renderResults(results);
 
-            }, 1000*0.25);
+            }, 1000*0.250);
         }
+    });
+
+    // Hide the suggestions when user clicks out of the search bar
+    searchBar.addEventListener('focusout', (e) => {
+        setTimeout(() => {
+            document.getElementById('searchResults').classList.remove('show');
+        }, 1000*0.1); 
+        // Hack: Do not hide the suggestions immediately as the browser needs some time process if one of the suggestions is chosen
     });
 }
 
