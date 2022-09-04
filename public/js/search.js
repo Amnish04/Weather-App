@@ -75,7 +75,7 @@ function configureSearchBar() {
     searchBar.addEventListener('focusout', (e) => {
         setTimeout(() => {
             document.getElementById('searchResults').classList.remove('show');
-        }, 1000*0.1); 
+        }, 1000*0.20); 
         // Hack: Do not hide the suggestions immediately as the browser needs some time process if one of the suggestions is chosen
     });
 }
