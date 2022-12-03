@@ -9,6 +9,7 @@
         --color-secondary: black;
         --color-accent: rgb(211, 0, 211);
         --color-accent-dark: rgba(148, 0, 148, 0.87);
+        --color-accent-darker: rgb(132, 1, 132);
     }
 
     ::selection {
@@ -63,6 +64,15 @@
     .actions form {
         width: min(100%, 500px);
         position: relative;
+    }
+
+    .searchWeatherButtonSvg {
+        transition: 200ms ease-in-out;
+    }
+
+    #searchWeatherButton:hover .searchWeatherButtonSvg, 
+    #searchWeatherButton:focus .searchWeatherButtonSvg {
+        rotate: 80deg;
     }
 
     input[type="text"] {
@@ -150,7 +160,8 @@
         fill: var(--color-accent);
     }
 
-    .location-icon:hover {
+    .location-icon:hover,
+    .location-icon:focus {
         opacity: 0.75;
     }
 
@@ -170,6 +181,44 @@
 
     .d-block {
         display: block;
+    }
+
+    .svg-button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .no-display {
+        display: none;
+    }
+    
+    .btn {
+        background-color: var(--color-accent-darker);
+        padding: 0.375em 0.75em;
+        border: none;
+        border-radius: 0.25em;
+        font-size: 1rem;
+        color: white;
+        margin-left: 1rem;
+        cursor: pointer;
+        text-align: center;
+        font-family: var(--font-secondary);
+    }
+
+    .btn * {
+        vertical-align: middle;
+    }
+
+    .btn:active {
+        box-shadow: inset 0px 0px 4px rgba(100, 100, 100, 0.25);
+    }
+
+    .btn:focus {
+        outline-style: groove;
+        outline-offset: 1px;
+        outline-width: 2px;
+        outline-color: var(--color-accent);
     }
 
     /* List Classes */
