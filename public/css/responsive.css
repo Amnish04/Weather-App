@@ -27,3 +27,13 @@
         display: none;
     }
 }
+
+@media screen and (max-width: 1000px) {
+    .location-icon {
+        order: 1;
+    }
+
+    #searchWeatherButton {
+        order: 2;
+    }
+}

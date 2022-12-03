@@ -32,6 +32,10 @@ function configureSearchBar() {
     let timeout = null;
 
     let searchBar = document.getElementById('countrySearch');
+    let searchButton = document.getElementById('searchWeatherButton');
+    let searchButtonLightImage = searchButton.querySelector('.light-svg');
+    let searchButtonDarkImage = searchButton.querySelector('.dark-svg');
+    let actualSubmitButton = document.getElementById('actualSubmitButton');
 
     /* Event Listeners */
 
@@ -69,6 +73,15 @@ function configureSearchBar() {
 
             }, 1000*0.250);
         }
+    });
+
+    searchButton.addEventListener('click', (e) => {
+        if (searchBar.value.length) {
+            searchButton.style.opacity = 0.8;
+            searchButtonLightImage.classList.toggle('no-display');
+            searchButtonDarkImage.classList.toggle('no-display');
+        }
+        actualSubmitButton.click();
     });
 
     // Hide the suggestions when user clicks out of the search bar
